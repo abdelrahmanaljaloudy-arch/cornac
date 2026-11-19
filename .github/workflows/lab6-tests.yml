@@ -1,0 +1,35 @@
+# Lab 6 - Targeted regression tests (builds Cornac from THIS fork's source).
+# Runs the existing upstream tests for utils, eval_methods and metrics.
+# It cannot prove behaviour is preserved for code outside these tests.
+name: Lab6 - Targeted tests
+
+on:
+  push:
+    branches:
+      - semester-investigation
+      - 'lab6-*'
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out this exact revision
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install build and test tools
+        run: python -m pip install --upgrade pip wheel setuptools Cython pytest "numpy>2.0.0" scipy
+
+      - name: Build Cornac from the fork source (Cython extensions)
+        run: python -m pip install -e .
+
+      - name: Run targeted existing tests
+        run: python -m pytest -q tests/cornac/utils/test_common.py tests/cornac/eval_methods tests/cornac/metrics
