@@ -1,0 +1,47 @@
+# Lab 6 - Ruff complexity/size rules on Cornac's handwritten Python source.
+# Cython (.pyx) files are NOT analysed by Ruff.
+name: Lab6 - Python Ruff
+
+on:
+  push:
+    branches:
+      - semester-investigation
+      - 'lab6-*'
+
+permissions:
+  contents: read
+
+jobs:
+  ruff-analysis:
+    runs-on: ubuntu-24.04
+    env:
+      SOURCE_PATH: cornac
+      RULES: C901,PLR0912,PLR0913,PLR0915
+    steps:
+      - name: Check out this exact revision
+        uses: actions/checkout@v4
+
+      - name: Install analyzer only (not the ML project)
+        run: |
+          python -m pip install 'ruff==0.14.4'
+          ruff --version
+
+      - name: Summary per rule (visible in the log)
+        run: ruff check "$SOURCE_PATH" --select "$RULES" --statistics --no-cache || true
+
+      - name: Full list of findings (visible in the log)
+        run: ruff check "$SOURCE_PATH" --select "$RULES" --output-format concise --no-cache || true
+
+      - name: JSON report
+        run: |
+          mkdir -p lab6-reports
+          ruff check "$SOURCE_PATH" --select "$RULES" --output-format json --no-cache > lab6-reports/ruff.json || true
+
+      - name: Upload JSON report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab6-ruff-report
+          path: lab6-reports/
+          if-no-files-found: warn
+          retention-days: 30
