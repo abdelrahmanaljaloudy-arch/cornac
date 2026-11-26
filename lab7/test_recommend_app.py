@@ -5,7 +5,7 @@ import os
 import cornac
 import pytest
 
-from lab7.recommend_app import build_model, item_popularity, recommend_for_user
+from lab7.recommend_app import INTERACTIONS, build_model, item_popularity, recommend_for_user
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,13 +26,22 @@ def test_cornac_is_loaded_from_this_fork_checkout():
 
 def test_u1_top3(fitted):
     model, train_set = fitted
-    # Baseline: the plain popularity ranking, including items u1 already consumed.
-    assert recommend_for_user(model, train_set, "u1", k=3) == ["i1", "i2", "i3"]
+    # Changed: u1 already consumed i1, i2, i3, so the next most popular items are shown.
+    assert recommend_for_user(model, train_set, "u1", k=3) == ["i4", "i5", "i6"]
 
 
 def test_u6_top3(fitted):
     model, train_set = fitted
-    assert recommend_for_user(model, train_set, "u6", k=3) == ["i1", "i2", "i3"]
+    # Changed: u6 already consumed i1 only.
+    assert recommend_for_user(model, train_set, "u6", k=3) == ["i2", "i3", "i4"]
+
+
+@pytest.mark.parametrize("user_id", ["u1", "u6"])
+def test_no_already_consumed_item_is_recommended(fitted, user_id):
+    model, train_set = fitted
+    recs = recommend_for_user(model, train_set, user_id, k=3)
+    seen = {item for user, item, _ in INTERACTIONS if user == user_id}
+    assert not seen & set(recs)
 
 
 # --- Invariants that must hold before and after any change -------------------
