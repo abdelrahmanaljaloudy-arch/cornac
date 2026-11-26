@@ -41,8 +41,12 @@ def build_model(interactions=INTERACTIONS, seed=123):
 
 
 def recommend_for_user(model, train_set, user_id, k=3):
-    """Return the top-k item IDs to show to `user_id`, most popular first."""
-    return model.recommend(user_id, k=k)
+    """Return the top-k item IDs to show to `user_id`, most popular first.
+
+    Items the user has already consumed in `train_set` are not recommended
+    again, so every slot shows the user something new.
+    """
+    return model.recommend(user_id, k=k, remove_seen=True, train_set=train_set)
 
 
 def item_popularity(model):
