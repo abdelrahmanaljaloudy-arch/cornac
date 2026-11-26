@@ -1,0 +1,52 @@
+name: Lab7 - Deploy and verify
+
+# Builds Cornac from this fork on a clean Ubuntu runner, runs the Lab 7
+# recommendation case and checks its observable result.
+on:
+  push:
+    branches:
+      - semester-investigation
+      - 'lab7-*'
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-and-verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out the fork commit
+        uses: actions/checkout@v4
+
+      - name: Show the commit under test
+        run: |
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          git log -1 --format='%H %an %s'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build tools
+        run: python -m pip install --upgrade pip wheel setuptools Cython pytest "numpy>2.0.0" scipy
+
+      - name: Build and install Cornac from this fork
+        run: python -m pip install -e .
+
+      - name: Show which Cornac is loaded
+        run: python -c "import cornac; print('version', cornac.__version__); print('loaded from', cornac.__file__)"
+
+      - name: Run the functional case
+        run: python -m lab7.recommend_app | tee lab7-report.json
+
+      - name: Verify behaviour
+        run: python -m pytest lab7/test_recommend_app.py -p no:cacheprovider
+
+      - name: Upload run report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab7-report
+          path: lab7-report.json
