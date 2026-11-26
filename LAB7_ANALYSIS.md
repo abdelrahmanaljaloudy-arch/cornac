@@ -69,10 +69,10 @@ To show that the pipeline detects the change by itself, I pushed the code change
 
 | GitHub evidence | Link |
 |---|---|
-| Lab #7 pull request (within your fork) | ⏳ added after merge |
-| **Merged commit** on `semester-investigation` | ⏳ added after merge |
+| Lab #7 pull request (within your fork) | [#1 — lab7-abdelrahman → semester-investigation](https://github.com/abdelrahmanaljaloudy-arch/cornac/pull/1) (merged with a merge commit, not squash) |
+| **Merged commit** on `semester-investigation` | [`dbbb5c17c0748a87e0c87d21ba154095a66b1924`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/dbbb5c17c0748a87e0c87d21ba154095a66b1924) (parents `12ae0c1` and `f0108f3`) |
 | Final `LAB7_ANALYSIS.md` on merged branch | https://github.com/abdelrahmanaljaloudy-arch/cornac/blob/semester-investigation/LAB7_ANALYSIS.md |
-| Student 1 meaningful commit(s) | Abdelrahman Aljaloudy: [`df06560`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/df06560ed230bab7d590f210d6a1aa330dd72f4f) (function, checks, workflow) · [`e16693b`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/e16693ba2318e6c9971e032902a817afd6d9cf23) (behaviour change) · [`2648ae5`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/2648ae578c6f3575cd3bfe51361124952c244894) (updated checks) |
+| Student 1 meaningful commit(s) | Abdelrahman Aljaloudy: [`df06560`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/df06560ed230bab7d590f210d6a1aa330dd72f4f) (function, checks, workflow) · [`e16693b`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/e16693ba2318e6c9971e032902a817afd6d9cf23) (behaviour change) · [`2648ae5`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/2648ae578c6f3575cd3bfe51361124952c244894) (updated checks) · [`f0108f3`](https://github.com/abdelrahmanaljaloudy-arch/cornac/commit/f0108f3117f898d4473d12ae13ebdc9f01e76078) (analysis record) |
 | Student 2 meaningful commit(s), if a pair | Not applicable (individual) |
 
 **LLM assistance (if used):** Claude (Anthropic) helped draft the workflow YAML, the small `recommend_app.py` case, the pytest checks and this record. I verified them myself: I read `Recommender.recommend` and `MostPop` in the fork to confirm what `remove_seen` does, checked every number in this file against the GitHub Actions logs (SHA, Cornac path, recommendations, test results, durations), and confirmed that the red run 2 failed only on the two expected assertions.
